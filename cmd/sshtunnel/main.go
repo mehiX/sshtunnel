@@ -15,18 +15,19 @@ const secretFile = ".secret"
 func init() {
 	flag.Parse()
 
-	if flag.NArg() != 3 {
-		log.Fatalln("Not enough arguments")
+	if flag.NArg() != 4 {
+		log.Fatalln("Not enough arguments. Need: addr remotePublicSrvr privateKeyFile remotePrivateSrvr")
 	}
 }
 
 func main() {
 
-	srvr := flag.Arg(0)
-	pkFile := flag.Arg(1)
-	dest := flag.Arg(2)
+	addr := flag.Arg(0)
+	srvr := flag.Arg(1)
+	pkFile := flag.Arg(2)
+	dest := flag.Arg(3)
 
-	t := tunnel.NewSSHTunnel(srvr, pkAuth(pkFile), dest)
+	t := tunnel.NewSSHTunnel(addr, srvr, pkAuth(pkFile), dest)
 
 	t.Log = log.New(os.Stdout, "", log.Ldate|log.Lmicroseconds)
 

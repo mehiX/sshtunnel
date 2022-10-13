@@ -17,9 +17,9 @@ type SSHTunnel struct {
 	Log         *log.Logger
 }
 
-func NewSSHTunnel(tunnelSrvr string, auth ssh.AuthMethod, destSrvr string) *SSHTunnel {
+func NewSSHTunnel(localAddr string, tunnelSrvr string, auth ssh.AuthMethod, destSrvr string) *SSHTunnel {
 
-	local := NewEndpoint("localhost:0")
+	local := NewEndpoint(localAddr)
 	srvr := NewEndpoint(tunnelSrvr)
 	if srvr.Port == 0 {
 		srvr.Port = 22
@@ -58,9 +58,10 @@ func (t *SSHTunnel) Start() error {
 
 	defer localListener.Close()
 
-	localPort := localListener.Addr().(*net.TCPAddr).Port
+	// localPort := localListener.Addr().(*net.TCPAddr).Port
+	localAddr := localListener.Addr()
 
-	fmt.Printf("Listening on port %d\n", localPort)
+	fmt.Printf("Listening on %s\n", localAddr)
 
 	for {
 		c, err := localListener.Accept()
